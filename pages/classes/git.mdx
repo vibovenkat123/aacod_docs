@@ -1,0 +1,164 @@
+## Git Reference
+
+### `GitOpts`
+
+```ts
+const opts: GitOpts = {
+    repo: "git@github.com:vibovenkat123/aacod.git",
+    bare: false,
+    dest: "/path/to/destination",
+    silent: false,
+    branch: "main",
+}
+```
+
+The options for configuring a Git repository.
+
+| Name      | Type      | Required | Description                                                                  |
+| :-------- | :-------- | :------- | :--------------------------------------------------------------------------  |
+| `repo`    | `string`  | Yes      | The URL or path of the repository to clone                                   |
+| `bare`    | `boolean` | Yes      | Whether to perform a bare clone or not                                       |
+| `dest`    | `string`  | Yes      | The destination path where the repository should be cloned to                |
+| `silent`  | `boolean` | Yes      | Whether to print the command output to stdout                                |
+| `branch`  | `string`  | No       | The branch name to checkout after cloning                                    |
+
+### `GitError`
+
+The `GitError` class represents an error that occurred during a Git operation.
+
+#### Properties
+
+| Name      | Type      | Description                                              |
+| :-------- | :-------- | :------------------------------------------------------- |
+| `message` | `string`  | The error message                                        |
+| `name`    | `string`  | The name of the error (e.g., `"Git Error: NOT_FOUND"`)   |
+
+### `GitSafeResponse`
+
+The response object returned by Git operations.
+
+| Name        | Type               | Description                                      |
+| :---------- | :----------------- | :----------------------------------------------- |
+| `success`   | `boolean`          | Whether the operation was successful              |
+| `error`     | [`GitError`](#giterror) `\|` `null` | The error that occurred (if any)                  |
+
+
+
+### `GitConfigOpts`
+
+```ts
+const opts: GitConfigOpts = {
+    name: "user.name",
+    scope: "global",
+    value: "bob",
+    silent: false,
+}
+```
+
+The options for configuring a Git configuration.
+
+| Name      | Type      | Required | Description                                                                                       |
+| :-------- | :-------- | :------- | :--------------------------------------------------------------------------                       |
+| `name`    | `string`  | Yes      | The name of the Git configuration key to set or retrieve                                          |
+| `scope`   | `string`  | No       | The scope of the Git configuration (`"global"`, `"local"`, or `"system"`, default is `"system"`)  |
+| `value`   | `string`  | No       | The value to set for the Git configuration key (for `set()` operation)                            |
+| `silent`  | `boolean` | Yes      | Whether to print the command output to stdout                                                     |
+
+### `GitConfigSafeResponse`
+
+The response object returned by Git configuration operations.
+
+| Name        | Type               | Description                                                    |
+| :---------- | :----------------- | :-----------------------------------------------               |
+| `success`   | `boolean`          | Whether the operation was successful                           |
+| `error`     | [`GitError`](#giterror) `\|` `null` | The error that occurred (if any)                               |
+| `data`      | `string \| null`   | The value of the Git configuration key (if retrieval succeeded)|
+
+## `GitRepo`
+
+The `GitRepo` class provides methods for interacting with Git repositories.
+
+### Constructor
+
+The `GitRepo` class constructor accepts a [`GitOpts`](#gitopts) object.
+
+```ts
+import { GitRepo, GitOpts } from "@vaibhavvenkat/aacod";
+
+const opts: GitOpts = {
+    repo: "git@github.com:vibovenkat123/aacod.git",
+    bare: false,
+    dest: "/path/to/destination",
+    silent: false,
+    branch: "main",
+}
+const repo = new GitRepo(opts);
+```
+
+### Methods
+
+#### `safeClone():` [`Promise<GitSafeResponse>`](#gitsaferesponse)
+
+Clones the Git repository but doesn't throw an error.
+
+```ts
+const res: GitSafeResponse = await repo.safeClone();
+```
+
+#### `clone(): Promise<void>`
+
+Clones the Git repository.
+
+```ts
+await repo.clone();
+```
+
+## `GitConfig`
+
+The `GitConfig` class provides methods for interacting with Git configurations.
+
+### Constructor
+The `GitConfig` class constructor accepts a [`GitConfigOpts`](#gitconfigopts) object.
+```ts
+const opts: GitConfigOpts = {
+    name: "user.name",
+    scope: "global",
+    value: "bob",
+    silent: false,
+}
+const config = new GitConfig(opts);
+```
+
+### Methods
+
+#### `safeSet():` [`Promise<GitSafeResponse>`](#gitsaferesponse)
+
+Sets a Git configuration key but doesn't throw an error.
+
+```ts
+const res: GitSafeResponse = await repo.safeSet();
+```
+
+#### `set(): Promise<void>`
+
+Sets a Git configuration key.
+
+```ts
+await repo.set();
+```
+
+#### `safeList():` [`Promise<GitConfigSafeResponse>`](#gitconfigsaferesponse)
+
+Retrieves the value of a Git configuration key but doesn't throw an error.
+
+```ts
+const res: GitConfigSafeResponse = await repo.safeList();
+```
+
+#### `list(): Promise<string>`
+
+Retrieves the value of a Git configuration key.
+
+```ts
+const value: string = await repo.list();
+```
