@@ -1,6 +1,6 @@
 import React from 'react'
+import {Steps} from "nextra-theme-docs";
 import { DocsThemeConfig } from 'nextra-theme-docs'
-
 const config: DocsThemeConfig = {
   useNextSeoProps() {
       return {
