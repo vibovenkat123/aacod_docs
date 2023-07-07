@@ -1,11 +1,91 @@
-# Introduction
- 
-Welcome to Nextra! This is a basic docs template. You can use it as a starting point for your own project :)
+***NOTE: THE DOCS ARE NOT YET FINISHED***
 
-## What is Nextra?
+# What is AACOD?
 
-A **simple**, **powerful** and **flexible** site generation framework with everything you love from Next.js.
+*AACOD* stands for Automation as Code.
 
-## Documentation
+*AACOD* is a away Automate having the same environment all within Typescript.
+Clone git repos, install packages, run scripts, all within a simple, easy way.
 
-The documentation is available at [https://nextra.site](https://nextra.site).
+## AACOD allows you to write automation code in typescript
+
+Thats all it does.
+
+Before when you wanted to write a script for your environment, it would
+typically contain a huge bash script. With AACOD, you can import other files,
+validate types, and do anything else that is possible in Typescript.
+
+```ts filename="install_pkgs.ts"
+const pkgs: Pick<BrewPackageOptions, "name">[] = [
+  {
+    name: "git",
+  },
+  {
+    name: "node",
+  },
+];
+
+async function main() {
+  for (const pkg of pkgs) {
+    const brewPkg = new BrewPackage({
+      name: pkg.name,
+      silent: false,
+      cask: false,
+      update_homebrew: false,
+      upgrade_all: false,
+    });
+    const res = await brewPkg.safeInstall();
+    if (!res.success) {
+      console.error(res.error);
+    }
+  }
+}
+```
+
+## **YOU** control the automation process
+
+This library isn't going to provide 50 helper functions to string together
+complex functions. Instead, it expects you to use Typescript to manage arrays,
+data structures, complex types, and more. The entire point of AACOD is that
+it gives you the classes to execute commands, and you string together the 
+logic:
+
+```ts filename="clone_projects.ts"
+// this won't work
+GitRepo.cloneMultipleUrlsSilently([
+  "git@github.com:vibovenkat123/personal_portfolio.git",
+  "git@github.com:vibovenkat123/aacod.git",
+]);
+
+// instead, you can do this
+const repos: Omit<GitOpts, "silent">[] = [
+  {
+    repo: "git@github.com:vibovenkat123/aacod.git",
+    bare: false,
+    dest: "~/here",
+  },
+  {
+    repo: "git@github.com:vibovenkat123/personal_portfolio.git",
+    bare: true,
+    dest: "~/not_here",
+  },
+];
+
+async function main() {
+  for (const repo of repos) {
+    const repoConf: GitOpts = {
+      ...repo,
+      silent: true,
+    };
+    const newRepo = new GitRepo(repoConf);
+    const res = await newRepo.safeClone();
+    if (res.success) {
+      console.log("yay");
+    } else {
+      console.log("nay");
+    }
+  }
+}
+
+main();
+```

@@ -1,0 +1,82 @@
+## Shell Command Opts
+
+```ts
+import { ShellCommandOpts } from "@vaibhavvenkat/aacod";
+
+const opts: ShellCommandOpts  = {
+    command: "ls",
+    silent: false,
+    chdir: `${process.env.HOME || "/"}`, // OPTIONAL
+    // NOTE: chdir needs to be an absolute path (e.g, no ~)
+}
+```
+
+### Properties
+
+| Name         | Type     | Required | Description                                                   |
+| :----------- | :------- | :------- | :------------------------------------------------------------ |
+| `command`    | `string` | Yes      | The command to run                                            |
+| `silent`     | `boolean`| Yes      | Whether to print the command output to stdout                 |
+| `chdir`      | `string` | No       | The directory to run the command in (MUST BE AN ABSOLUTE PATH)|
+| `executable` | `string` | No       | The executable to run the command with (e.g, /bin/bash)       |
+
+## SafeRunResponse
+
+```ts
+import { ShellCommand, ShellCommandOpts, SafeRunResponse } from "@vaibhavvenkat/aacod";
+
+async function main() {
+    const opts: ShellCommandOpts  = {
+        command: "ls",
+        silent: false,
+        chdir: `${process.env.HOME || "/"}`
+    }
+    const cmd = new ShellCommand(opts);
+    const res: SafeRunResponse = await cmd.safeRun();
+}
+main()
+```
+
+### Properties
+
+| Name        | Type                          | Description                                                                                                      |
+|------------ |-----------------------------  |----------------------------------------------------------------------------------------------------------------  |
+| `success`   | `boolean`                     | Whether the command ran successfully                                                                             |
+| `error`     | `ShellCommandError \| null`   | The error that was thrown if the command errored                                                                 |
+
+
+
+## ShellCommandError
+
+**Same properties as error, just with some internal properties for development**
+
+## Shell Command
+
+```ts
+import { ShellCommand, ShellCommandOpts } from "@vaibhavvenkat/aacod";
+
+async function main() {
+    const opts: ShellCommandOpts  = {
+        command: "ls",
+        silent: false,
+        chdir: `${process.env.HOME || "/"}`
+    }
+    const cmd = new ShellCommand(opts);
+    const res = await cmd.safeRun();
+    if (res.success) {
+        console.log("Success!");
+    } else if (res.error) {
+        console.error(`Error! ${res.error.message}`);
+    }
+}
+main()
+```
+
+**Takes in a `ShellCommandOpts` object**
+
+## Methods
+
+| Name        | Returned Type              | Description                                                                                                       |
+|------------ |--------------------------- |------------------------------------------------------------------------------------------------------------------ |
+| `safeRun()` | `Promise<SafeRunResponse>` | Runs `run()`, but instead of throwing an error it returns a `SafeRunResponse`                                     |
+| `run()`     | `Promise<void>`            | Runs the command, prints the stdout if opts.silent is true. If the command errors it throws a `ShellCommandError` |

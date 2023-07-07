@@ -1,0 +1,65 @@
+import { Callout, Steps } from "nextra-theme-docs";
+
+# Getting started
+
+> These docs assume you use Typescript
+
+## Prereqs
+
+* Node
+* Typescript
+* Npm, pnpm, or yarn
+* A Unix environment (Linux or Macos)
+
+## Setup
+
+<Steps>
+
+### Install typescript
+
+import { Tab, Tabs } from "nextra-theme-docs";
+
+<Tabs items={["npm", "yarn", "pnpm"]}>
+    <Tab>
+    ```bash copy
+    npm install -D @types/node typescript
+    ```
+    </Tab>
+    <Tab>
+    ```bash copy
+    yarn add -D @types/node typescript
+    ```
+    </Tab>
+    <Tab>
+    ```bash copy
+    pnpm add -D @types/node typescript
+    ```
+    </Tab>
+</Tabs>
+
+### Install AACOD
+
+<Tabs items={["npm", "yarn", "pnpm"]}>
+    <Tab>
+    ```bash copy
+    npm install @vaibhavvenkat/aacod
+    ```
+    </Tab>
+    <Tab>
+    ```bash copy
+    yarn add @vaibhavvenkat/aacod
+    ```
+    </Tab>
+    <Tab>
+    ```bash copy
+    pnpm add @vaibhavvenkat/aacod
+    ```
+    </Tab>
+</Tabs>
+
+</Steps>
+
+## Usage
+
+To start using AACOD, refer to the [Quick start](/quick-start)
+or go directly to the [Class reference](/classes/shell)
