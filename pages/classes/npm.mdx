@@ -1,0 +1,75 @@
+## Npm Reference
+
+### Types
+
+#### `NpmPkgOpts`
+
+The options for configuring an npm package.
+
+| Name      | Type     | Required | Description                              |
+| --------- | -------- | -------- | ---------------------------------------- |
+| `name`    | `string` | Yes      | The name of the package to install       |
+| `version` | `string` | No       | The version of the package to install    |
+| `path`    | `string` | No       | The path to install the package          |
+| `global`  | `boolean`| Yes      | Whether to install the package globally  |
+| `silent`  | `boolean`| Yes      | Whether to print the command output      |
+
+#### `NpmError`
+
+The `NpmError` class represents an error that occurred during an npm operation.
+
+##### Properties
+
+| Name       | Type     | Description                        |
+| ---------- | -------- | ---------------------------------- |
+| `message`  | `string` | The error message                  |
+| `name`     | `string` | The name of the error              |
+
+#### `NpmSafeResponse`
+
+The response object returned by npm operations.
+
+| Name       | Type             | Description                                                |
+| ---------- | ---------------- | --------------------------------------                     |
+| `success`  | `boolean`        | Whether the operation was successful                       |
+| `error`    | [`NpmError`](#npmerror) `\|` `null` | The error that occurred (if any)        |
+
+### `NpmPackage` Class
+
+The `NpmPackage` class provides methods for interacting with npm packages.
+
+#### Constructor
+
+The `NpmPackage` class constructor accepts an `NpmPkgOpts` object.
+
+```ts
+import { NpmPackage, NpmPkgOpts } from "@vaibhavvenkat/aacod";
+
+const opts: NpmPkgOpts = {
+    name: "package-name",
+    version: "1.0.0",
+    path: "/path/to/install",
+    global: true,
+    silent: false,
+};
+
+const npmPackage = new NpmPackage(opts);
+```
+
+#### Methods
+
+##### `safeInstall(): Promise<`[`NpmSafeResponse`](#npmsaferesponse)`>`
+
+Safely installs an npm package without throwing an error.
+
+```ts
+const res: NpmSafeResponse = await npmPackage.safeInstall();
+```
+
+##### `install(): Promise<void>`
+
+Installs an npm package.
+
+```ts
+await npmPackage.install();
+```

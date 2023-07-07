@@ -1,0 +1,105 @@
+## Brew Reference
+
+#### `BrewError`
+
+The `BrewError` class represents an error that occurred during a Brew operation.
+
+##### Properties
+
+| Name            | Type              | Description                                         |
+| --------------- | ----------------- | --------------------------------------------------- |
+| `message`       | `string`          | The error message                                   |
+| `name`          | `string`          | The name of the error (e.g., `"Brew Error: ..."`)   |
+
+#### `BrewPackageOptions`
+
+The options for configuring a Brew package.
+
+| Name                | Type                | Required | Description                                                         |
+| ------------------- | ------------------  | -------- | ---------------------------------------------------------------     |
+| `name`              | `string \| string[]`| Yes      | The name(s) of the package(s) to install/uninstall                  |
+| `cask`              | `boolean`           | Yes      | Whether the package(s) is a cask                                    |
+| `silent`            | `boolean`           | Yes      | Whether to print the command output to stdout                       |
+| `update_homebrew`   | `boolean`           | Yes      | Whether to update Homebrew before installing/uninstalling           |
+| `upgrade_all`       | `boolean`           | Yes      | Whether to upgrade all Brew packages before installing/uninstalling |
+
+#### `BrewSafeError`
+
+The response object returned by Brew operations.
+
+| Name        | Type                    | Description                                           |
+| ----------- | ----------------------- | ----------------------------------------------------- |
+| `success`   | `boolean`               | Whether the operation was successful                  |
+| `error`     | [`BrewError`](#brewerror) `\|` `null` | The error that occurred (if any)           |
+
+### `BrewPackage` Class
+
+The `BrewPackage` class provides methods for interacting with Brew packages.
+
+#### Constructor
+
+The `BrewPackage` class constructor accepts a [`BrewPackageOptions`](#brewpackageoptions) object.
+
+```ts
+import { BrewPackage, BrewPackageOptions } from "@vaibhavvenkat/aacod";
+
+const opts: BrewPackageOptions = {
+    name: "package-name",
+    cask: false,
+    silent: false,
+    update_homebrew: true,
+    upgrade_all: true,
+};
+
+const brewPackage = new BrewPackage(opts);
+```
+
+#### Methods
+
+##### `upgradeAllPkgs(): Promise<void>`
+
+Upgrades all Brew packages.
+
+```ts
+await brewPackage.upgradeAllPkgs();
+```
+
+##### `updateHomebrew(): Promise<void>`
+
+Updates Homebrew.
+
+```ts
+await brewPackage.updateHomebrew();
+```
+
+##### `safeInstall(): Promise<`[`BrewSafeError`](#brewsafeerror)`>`
+
+Safely installs a Brew package without throwing an error.
+
+```ts
+const res: BrewSafeError = await brewPackage.safeInstall();
+```
+
+##### `install(): Promise<void>`
+
+Installs a Brew package.
+
+```ts
+await brewPackage.install();
+```
+
+##### `safeUninstall(): Promise<`[`BrewSafeError`](#brewsafeerror)`>`
+
+Safely uninstalls a Brew package without throwing an error.
+
+```ts
+const res: BrewSafeError = await brewPackage.safeUninstall();
+```
+
+##### `uninstall(): Promise<void>`
+
+Uninstalls a Brew package.
+
+```ts
+await brewPackage.uninstall();
+```

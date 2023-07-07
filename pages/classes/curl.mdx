@@ -1,0 +1,64 @@
+## Url Reference
+
+### Types
+
+#### `UrlOpts`
+
+The options for configuring a CURL request.
+
+| Name        | Type      | Required | Description                                           |
+| ----------- | --------- | -------- | ----------------------------------------------------- |
+| `dest`      | `string`  | Yes      | The destination path to save the downloaded file       |
+| `url`       | `string`  | Yes      | The URL to download                                   |
+| `silent`    | `boolean` | Yes      | Whether to print the command output                    |
+| `chdir`     | `string`  | No       | The directory to change to before executing the command |
+| `timeout`   | `number`  | No       | The timeout duration in seconds                        |
+
+#### `UrlSafeGetResponse`
+
+The response object returned by CURL requests.
+
+| Name       | Type                       | Description                            |
+| ---------- | -------------------------- | -------------------------------------- |
+| `success`  | `boolean`                     | Whether the request was successful     |
+| `error`    | [`ShellCommandError`](/classes/shell#shellcommanderror) `\|` `null` | The error that occurred (if any)        |
+
+### `Url` Class
+
+The `Url` class provides methods for making CURL requests.
+
+#### Constructor
+
+The `Url` class constructor accepts a `UrlOpts` object.
+
+```ts
+import { Url, UrlOpts } from "@vaibhavvenkat/aacod";
+
+const opts: UrlOpts = {
+    dest: "/path/to/save",
+    url: "https://example.com/file.txt",
+    silent: false,
+    chdir: "/path/to/directory",
+    timeout: 30,
+};
+
+const url = new Url(opts);
+```
+
+#### Methods
+
+##### `safeGet(): Promise<`[`UrlSafeGetResponse`](#urlsafegetresponse)`>`
+
+Safely performs CURL without throwing an error.
+
+```ts
+const res: UrlSafeGetResponse = await url.safeGet();
+```
+
+##### `get(): Promise<void>`
+
+Performs CURL on the given url.
+
+```ts
+await url.get();
+```
